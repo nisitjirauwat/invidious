@@ -204,50 +204,6 @@
                 <% end %>
             <% end %>
 
-            <% if env.get?("user") && config.admins.includes? env.get?("user").as(User).email %>
-                <legend><%= translate(locale, "Administrator preferences") %></legend>
-
-                <div class="pure-control-group">
-                    <label for="admin_default_home"><%= translate(locale, "Default homepage: ") %></label>
-                    <select name="admin_default_home" id="admin_default_home">
-                        <% feed_options.each do |option| %>
-                            <option value="<%= option %>" <% if CONFIG.default_user_preferences.default_home == option %> selected <% end %>><%= translate(locale, option) %></option>
-                        <% end %>
-                    </select>
-                </div>
-
-                <div class="pure-control-group">
-                    <label for="admin_feed_menu"><%= translate(locale, "Feed menu: ") %></label>
-                    <% (feed_options.size - 1).times do |index| %>
-                        <select name="admin_feed_menu[<%= index %>]" id="admin_feed_menu[<%= index %>]">
-                            <% feed_options.each do |option| %>
-                                <option value="<%= option %>" <% if CONFIG.default_user_preferences.feed_menu[index]? == option %> selected <% end %>><%= translate(locale, option) %></option>
-                            <% end %>
-                        </select>
-                    <% end %>
-                </div>
-
-                <div class="pure-control-group">
-                    <label for="captcha_enabled"><%= translate(locale, "CAPTCHA enabled: ") %></label>
-                    <input name="captcha_enabled" id="captcha_enabled" type="checkbox" <% if config.captcha_enabled %>checked<% end %>>
-                </div>
-
-                <div class="pure-control-group">
-                    <label for="login_enabled"><%= translate(locale, "Login enabled: ") %></label>
-                    <input name="login_enabled" id="login_enabled" type="checkbox" <% if config.login_enabled %>checked<% end %>>
-                </div>
-
-                <div class="pure-control-group">
-                    <label for="registration_enabled"><%= translate(locale, "Registration enabled: ") %></label>
-                    <input name="registration_enabled" id="registration_enabled" type="checkbox" <% if config.registration_enabled %>checked<% end %>>
-                </div>
-
-                <div class="pure-control-group">
-                    <label for="statistics_enabled"><%= translate(locale, "Report statistics: ") %></label>
-                    <input name="statistics_enabled" id="statistics_enabled" type="checkbox" <% if config.statistics_enabled %>checked<% end %>>
-                </div>
-            <% end %>
-
             <% if env.get? "user" %>
                 <legend><%= translate(locale, "Data preferences") %></legend>
 

@@ -864,10 +864,6 @@ def extract_polymer_config(body)
   params["likes"] = JSON::Any.new(likes)
   params["dislikes"] = JSON::Any.new(dislikes)
 
-  params["descriptionHtml"] = JSON::Any.new(primary_results.try &.as_a.select { |object| object["videoSecondaryInfoRenderer"]? }[0]?
-    .try &.["videoSecondaryInfoRenderer"]?.try &.["description"]?.try &.["runs"]?
-      .try &.as_a.try { |t| content_to_comment_html(t).gsub("\n", "<br/>") } || "<p></p>")
-
   metadata = primary_results.try &.as_a.select { |object| object["videoSecondaryInfoRenderer"]? }[0]?
     .try &.["videoSecondaryInfoRenderer"]?
       .try &.["metadataRowContainer"]?
@@ -924,30 +920,8 @@ def extract_polymer_config(body)
   params
 end
 
-def get_video(id, db, refresh = true, region = nil, force_refresh = false)
-  if (video = db.query_one?("SELECT * FROM videos WHERE id = $1", id, as: Video)) && !region
-    # If record was last updated over 10 minutes ago, or video has since premiered,
-    # refresh (expire param in response lasts for 6 hours)
-    if (refresh &&
-       (Time.utc - video.updated > 10.minutes) ||
-       (video.premiere_timestamp.try &.< Time.utc)) ||
-       force_refresh
-      begin
-        video = fetch_video(id, region)
-        db.exec("UPDATE videos SET (id, info, updated) = ($1, $2, $3) WHERE id = $1", video.id, video.info.to_json, video.updated)
-      rescue ex
-        db.exec("DELETE FROM videos * WHERE id = $1", id)
-        raise ex
-      end
-    end
-  else
-    video = fetch_video(id, region)
-    if !region
-      db.exec("INSERT INTO videos VALUES ($1, $2, $3) ON CONFLICT (id) DO NOTHING", video.id, video.info.to_json, video.updated)
-    end
-  end
-
-  return video
+def get_video(id, refresh = true, region = nil, force_refresh = false)
+  return fetch_video(id, region)
 end
 
 def fetch_video(id, region)

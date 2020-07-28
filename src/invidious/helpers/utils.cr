@@ -335,34 +335,6 @@ def sha256(text)
   return digest.final.hexstring
 end
 
-def subscribe_pubsub(topic, key, config)
-  case topic
-  when .match(/^UC[A-Za-z0-9_-]{22}$/)
-    topic = "channel_id=#{topic}"
-  when .match(/^(PL|LL|EC|UU|FL|UL|OLAK5uy_)[0-9A-Za-z-_]{10,}$/)
-    # There's a couple missing from the above regex, namely TL and RD, which
-    # don't have feeds
-    topic = "playlist_id=#{topic}"
-  else
-    # TODO
-  end
-
-  time = Time.utc.to_unix.to_s
-  nonce = Random::Secure.hex(4)
-  signature = "#{time}:#{nonce}"
-
-  body = {
-    "hub.callback"      => "#{HOST_URL}/feed/webhook/v1:#{time}:#{nonce}:#{OpenSSL::HMAC.hexdigest(:sha1, key, signature)}",
-    "hub.topic"         => "https://www.youtube.com/xml/feeds/videos.xml?#{topic}",
-    "hub.verify"        => "async",
-    "hub.mode"          => "subscribe",
-    "hub.lease_seconds" => "432000",
-    "hub.secret"        => key.to_s,
-  }
-
-  return make_client(PUBSUB_URL).post("/subscribe", form: body)
-end
-
 def parse_range(range)
   if !range
     return 0_i64, nil

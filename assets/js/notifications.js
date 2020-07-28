@@ -84,14 +84,7 @@ function create_notification_stream(subscriptions) {
         }
     }
 
-    notifications.addEventListener('error', handle_notification_error);
     notifications.stream();
-}
-
-function handle_notification_error(event) {
-    console.log('Something went wrong with notifications, trying to reconnect...');
-    notifications = { close: function () { } };
-    setTimeout(function () { get_subscriptions(create_notification_stream) }, 1000);
 }
 
 window.addEventListener('load', function (e) {
@@ -104,7 +97,6 @@ window.addEventListener('load', function (e) {
             if (!localStorage.getItem('stream')) {
                 notifications = { close: function () { } };
                 localStorage.setItem('stream', true);
-                get_subscriptions(create_notification_stream);
             }
         }, Math.random() * 1000 + 50);
     }
@@ -118,7 +110,6 @@ window.addEventListener('load', function (e) {
                     if (!localStorage.getItem('stream')) {
                         notifications = { close: function () { } };
                         localStorage.setItem('stream', true);
-                        get_subscriptions(create_notification_stream);
                     }
                 }, Math.random() * 1000 + 50);
             }

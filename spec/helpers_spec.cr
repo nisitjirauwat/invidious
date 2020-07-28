@@ -1,6 +1,5 @@
 require "kemal"
 require "openssl/hmac"
-require "pg"
 require "protodec/utils"
 require "spec"
 require "yaml"
@@ -24,14 +23,6 @@ describe "Helper" do
       produce_channel_videos_url(ucid: "UCXuqSBlHAE6Xw-yeJA0Tunw", page: 20).should eq("/browse_ajax?continuation=4qmFsgJAEhhVQ1h1cVNCbEhBRTZYdy15ZUpBMFR1bncaJEVnWjJhV1JsYjNNd0FqZ0JZQUZxQUxnQkFDQUFlZ0l5TUE9PQ%3D%3D&gl=US&hl=en")
 
       produce_channel_videos_url(ucid: "UC-9-kyTW8ZkZNDHQJ6FgpwQ", page: 20, sort_by: "popular").should eq("/browse_ajax?continuation=4qmFsgJAEhhVQy05LWt5VFc4WmtaTkRIUUo2Rmdwd1EaJEVnWjJhV1JsYjNNd0FqZ0JZQUZxQUxnQkFDQUFlZ0l5TUJnQg%3D%3D&gl=US&hl=en")
-    end
-  end
-
-  describe "#produce_channel_search_url" do
-    it "correctly produces token for searching a specific channel" do
-      produce_channel_search_url("UCXuqSBlHAE6Xw-yeJA0Tunw", "", 100).should eq("/browse_ajax?continuation=4qmFsgI2EhhVQ1h1cVNCbEhBRTZYdy15ZUpBMFR1bncaGEVnWnpaV0Z5WTJnNEFYb0RNVEF3dUFFQVoA&gl=US&hl=en")
-
-      produce_channel_search_url("UCXuqSBlHAE6Xw-yeJA0Tunw", "По ожиशुपतिरपि子而時ஸ்றீனி", 0).should eq("/browse_ajax?continuation=4qmFsgJ0EhhVQ1h1cVNCbEhBRTZYdy15ZUpBMFR1bncaGEVnWnpaV0Z5WTJnNEFYb0JNTGdCQUE9PVo-0J_QviDQvtC20LjgpLbgpYHgpKrgpKTgpL_gpLDgpKrgpL_lrZDogIzmmYLgrrjgr43grrHgr4Dgrqngrr8%3D&gl=US&hl=en")
     end
   end
 
