@@ -22,7 +22,7 @@ RUN apk add --no-cache librsvg ttf-opensans
 WORKDIR /invidious
 RUN addgroup -g 1000 -S invidious && \
     adduser -u 1000 -S invidious -G invidious
-COPY ./assets/ ./assets/
+
 COPY --chown=invidious ./config/config.yml ./config/config.yml
 RUN sed -i 's/host: \(127.0.0.1\|localhost\)/host: postgres/' config/config.yml
 COPY ./locales/ ./locales/

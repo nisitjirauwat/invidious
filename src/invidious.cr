@@ -38,7 +38,6 @@ HOST_URL        = make_host_url(CONFIG, Kemal.config)
 
 MAX_ITEMS_PER_PAGE = 1500
 
-REQUEST_HEADERS_WHITELIST  = {"accept", "accept-encoding", "cache-control", "content-length", "if-none-match", "range"}
 RESPONSE_HEADERS_BLACKLIST = {"access-control-allow-origin", "alt-svc", "server"}
 HTTP_CHUNK_SIZE            = 10485760 # ~10MB
 
@@ -49,7 +48,6 @@ CURRENT_VERSION = {{ "#{`git describe --tags --abbrev=0`.strip}" }}
 # This is used to determine the `?v=` on the end of file URLs (for cache busting). We
 # only need to expire modified assets, so we can use this to find the last commit that changes
 # any assets
-ASSET_COMMIT = {{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}
 
 SOFTWARE = {
   "name"    => "invidious",
@@ -178,16 +176,6 @@ get "/" do |env|
   templated "empty"
 end
 
-get "/privacy" do |env|
-  locale = LOCALES[env.get("preferences").as(Preferences).locale]?
-  templated "privacy"
-end
-
-get "/licenses" do |env|
-  locale = LOCALES[env.get("preferences").as(Preferences).locale]?
-  rendered "licenses"
-end
-
 # Videos
 
 get "/api/v1/videos/:id" do |env|
@@ -314,12 +302,6 @@ error 500 do |env|
   END_HTML
   templated "error"
 end
-
-static_headers do |response, filepath, filestat|
-  response.headers.add("Cache-Control", "max-age=2629800")
-end
-
-public_folder "assets"
 
 Kemal.config.powered_by_header = false
 add_handler FilteredCompressHandler.new

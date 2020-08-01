@@ -9,7 +9,6 @@ keywords:
 - video
 - privacy
 home: https://invidio.us/
-icon: https://raw.githubusercontent.com/omarroth/invidious/05988c1c49851b7d0094fca16aeaf6382a7f64ab/assets/favicon-32x32.png
 sources:
 - https://github.com/omarroth/invidious
 maintainers:

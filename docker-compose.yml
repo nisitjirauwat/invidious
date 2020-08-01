@@ -6,7 +6,7 @@ services:
       dockerfile: docker/Dockerfile
     restart: unless-stopped
     ports:
-      - "3001:3000"
+      - "3002:3000"
     environment:
       # Adapted from ./config/config.yml
       INVIDIOUS_CONFIG: |
